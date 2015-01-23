@@ -11,6 +11,7 @@
 */
 
 $(document).ready(function() {
+	$.server = "http://127.0.1.1:1233"
 	$.fps = 30;
 	$.movingObjects = [];
 
@@ -25,7 +26,18 @@ $(document).ready(function() {
 			return (layer.selected === true);
 		});
 		if (layers.length == 2) {
-			animateTransferResources(layers[0], layers[1]);
+			$.post( $.server + "/transfer",
+				{
+					"to": "0",
+					"from": "1"
+				},
+				function(data) {
+					console.log(data);
+					animateTransferResources(layers[0], layers[1]);
+				}
+			).fail(function() {
+				alert( "error" );
+			});
 		}
 	});
 });
