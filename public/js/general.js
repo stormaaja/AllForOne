@@ -22,11 +22,15 @@ Object.size = function(obj) {
 $(document).ready(function() {
 	$.maxResources = 15;
 	$.resourceGenInterval = 3000;
-	$.player = addCastle(100, 100);
+	$.players = [];
+
 	$.customResource = "diamonds";
-	addCastle(500, 100);
-	addCastle(300, 500);
-	$.resources = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 }
+
+	$.player = new Player("user", 100, 100);
+	$.player.castle.selectable = false;
+
+	$.players[0] = new Player("user2", 500, 100);
+	$.players[1] = new Player("user3", 300, 500);
 
 	$('#sendResources').click(function() { 
 		if ($.sendTo === undefined) {
@@ -39,7 +43,7 @@ $(document).ready(function() {
 				var amount = valueToInt($(this));
 				if (amount > 0) {
 					resources[key] = amount;
-					$.resources[key] -= amount;
+					$.player.resources[key] -= amount;
 					$(this).prop('value', 0);
 				}
 			});
@@ -47,6 +51,7 @@ $(document).ready(function() {
 			if (Object.size(resources) > 0) {
 				refreshResources();
 				transferResources($.sendTo, resources);
+				$.network.send($.sendTo.nick, resources);
 			}
 		}
 	});
@@ -60,7 +65,7 @@ $(document).ready(function() {
 	$('.sendInput').change(function() {
 		var val = valueToInt($(this));
 		var key = $(this).data('resourceType');
-		if (val > 0 && val > $.resources[key])
+		if (val > 0 && val > $.player.resources[key])
 			$(this).prop('value', val - 1);
 	});
 
@@ -74,16 +79,22 @@ $(document).ready(function() {
 		$('.resourceWood').remove();
 
 	$('#buttonSave').click(function() {
-		$.network = new Network();
-		$.network.onConnected = function() {
-			$('#buttonCloseSettingsDialog').click();
-		}
-		$.network.connect();
+		connectToServer();
 	});
 
-	$('#buttonUserSettings').click();
+	connectToServer();
+
+	//$('#buttonUserSettings').click();
 
 });
+
+function connectToServer() {
+	$.network = new Network();
+	$.network.onConnected = function() {
+		$('#buttonCloseSettingsDialog').click();
+	}
+	$.network.connect();
+}
 
 
 function showError(message, object) {
@@ -111,7 +122,6 @@ function valueToInt(input) {
 }
 
 function transferResources(castleDestination, resources) {
-	console.log(resources);
 	$('canvas').drawRect({
 		layer: true,
 		fillStyle: '#000',
@@ -135,54 +145,16 @@ function transferResources(castleDestination, resources) {
 		});
 }
 
-function addCastle(x, y) {
-	return $("canvas").drawArc({
-		layer: true,
-		fillStyle: "green",
-		x: x, y: y,
-		radius: 50,
-		selected: false,
-		click: function(layer) {
-			if (layer === $.player)
-				return;
-			
-			if ($.sendTo !== undefined && $.sendTo !== layer)
-				$.sendTo.toggleSelected();
-			layer.toggleSelected();
-			if (layer.selected)
-				$.sendTo = layer;
-			else
-				$.sendTo = undefined;
-			
-			$('canvas').drawLayers();
-		},
-		setSelected: function(val) {
-			this.selected = val;
-			if (this.selected) {
-				this.shadowBlur = 20;
-				this.shadowColor = "blue";
-			} else {
-				this.shadowBlur = 0;
-				this.shadowColor = "";
-			}
-			return this.selected;
-		},
-		toggleSelected: function() {
-			return this.setSelected(!this.selected);
-		}
-	}).getLayer(-1);
-}
-
 function increaseResources() {
 	$('.resourceGen').each(function() {
 		var resourceType = $(this).data('resourceType');
-		$.resources[$(this).data('resourceType')] += valueToInt($(this));
-		$("span[data-resource-type='" + resourceType + "']").text($.resources[resourceType]);
+		$.player.resources[$(this).data('resourceType')] += valueToInt($(this));
+		$("span[data-resource-type='" + resourceType + "']").text($.player.resources[resourceType]);
 	});
 }
 
 function refreshResources() {
 	$('.resourceCount').each(function() {
-		$(this).text($.resources[$(this).data('resourceType')]);
+		$(this).text($.player.resources[$(this).data('resourceType')]);
 	});
 }
