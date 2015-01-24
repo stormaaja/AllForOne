@@ -58,19 +58,30 @@
           </div>
 
           <div class="row">
-            <div class="col-md-4"><input type="number" class="form-control resourceGen" data-resource-type="gold" min="0" value="5" max="15"/></div>
-            <div class="col-md-4"><input type="number" class="form-control resourceGen" data-resource-type="food" min="0" value="5" max="15"/></div>
-            <div class="col-md-4"><input type="number" class="form-control resourceGen resourceWood" data-resource-type="wood" min="0" value="5" max="15"/></div>
-            <div class="col-md-4"><input type="number" class="form-control resourceGen resourceDiamonds" data-resource-type="diamonds" min="0" value="5" max="15"/></div>
+            <div class="col-md-4" id="valueForresourcePercentGold">35</div>
+            <div class="col-md-4" id="valueForresourcePercentFood">35</div>
+            <div class="col-md-4 resourceWood" id="valueForresourcePercentWood">30</div>
+            <div class="col-md-4 resourceDiamonds" id="valueForresourcePercentDiamonds">30</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4"><input type="range" class="form-control resourceGen" id="resourcePercentGold" data-resource-type="gold" data-resource-value-holder="valueForresourcePercentGold" step="5" min="0" value="35" max="100" /></div>
+            <div class="col-md-4"><input type="range" class="form-control resourceGen" id="resourcePercentFood" data-resource-type="food" data-resource-value-holder="valueForresourcePercentFood" step="5" min="0" value="35" max="100"/></div>
+            <div class="col-md-4"><input type="range" class="form-control resourceGen resourceWood" id="resourcePercentWood" data-resource-type="wood" data-resource-value-holder="valueForresourcePercentWood" step="5" min="0" value="30" max="100"/></div>
+            <div class="col-md-4"><input type="range" class="form-control resourceGen resourceDiamonds" id="resourcePercentDiamonds" data-resource-type="diamonds" data-resource-value-holder="valueForresourcePercentDiamonds" step="5" min="0" value="30" max="100"/></div>
           </div>
 
           <div class="row">
             <div class="col-md-3">Defences:</div>
-            <div class="col-md-3">0</div>
+            <div class="col-md-3 playerStat" data-stat-type="defences">0</div>
             <div class="col-md-3">Production:</div>
-            <div class="col-md-3">0</div>
+            <div class="col-md-3 playerStat" data-stat-type="production">1</div>
             <div class="col-md-3">Caravans:</div>
-            <div class="col-md-3">1</div>
+            <div class="col-md-3 playerStat" data-stat-type="caravans">1</div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">Food consumption:</div>
+            <div class="col-md-3" id="foodConsumptionValue" data-stat-type="consumption">1</div>
           </div>
 
           <div class="row">
