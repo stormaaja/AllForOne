@@ -22,6 +22,15 @@ set :environment, :development
 playerData = Hash.new
 players = []
 
+def containsPlayer(nick)
+	players.each do | player |
+		if p.nick == nick
+			return true
+		end
+	end
+	false
+end
+
 post '/send/:destination' do |destinationNick|
 	puts "Object #{params["object"]} To: #{destinationNick}";
 	if playerData[destinationNick].nil?
@@ -32,14 +41,14 @@ post '/send/:destination' do |destinationNick|
 end
 
 post '/connect' do
-	if players[params["nick"]].nil?
+	if containsPlayer(params["nick"])
+		puts "User #{params["nick"]} comes back";
+	else
 		puts "New user #{params["nick"]} as #{params["playertype"]}"
 		players.push({ :nick => params["nick"], :playertype => params["playertype"] })
 		playerData.each do |nick, data|
 			playerData[nick].push({ :operation => "playerlist", :players =>  players })
 		end
-	else
-		puts "User #{params["nick"]} comes back";
 	end
 	""
 end
