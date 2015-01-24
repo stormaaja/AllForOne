@@ -21,6 +21,14 @@ function Network() {
 	this.nick = "anonymous";
 	
 	this.send = function(user, object) {
+		var network = this;
+		$.post(this.server + "/send/" + user,
+			{ "object": object },
+		 	function(data) {
+				network.onObjectSent(object);
+		});
+
+
 		console.log("Send " + user + ": " + object);
 		this.onObjectSent(object);
 	};
