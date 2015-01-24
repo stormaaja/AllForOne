@@ -16,6 +16,7 @@ function Player(nick, x, y) {
 	this.x = x;
 	this.y = y;
 	this.selected = false;
+	this.stats = { "production": 1, "defences": 0, "caravans": 1 };
 	
 	this.resources = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
 
