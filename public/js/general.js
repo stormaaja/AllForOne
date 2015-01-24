@@ -20,9 +20,12 @@ Object.size = function(obj) {
 };
 
 $(document).ready(function() {
-	$.maxResources = 15;
+	$.maxResources = 100;
+	$.tax = 0;
 	$.resourceGenInterval = 3000;
 	$.players = [];
+	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
+	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
 
 	$.customResource = "diamonds";
 
@@ -85,6 +88,7 @@ $(document).ready(function() {
 	connectToServer();
 
 	//$('#buttonUserSettings').click();
+	refreshStats();
 
 });
 
@@ -103,6 +107,14 @@ function showError(message, object) {
 
 function balanceResourceGens(inputChanged) {
 	var resourcesLeft = $.maxResources - valueToInt(inputChanged);
+	if (resourcesLeft > 100) {
+		inputChanged.prop('value', 100);
+		resourcesLeft = 0;
+	} else if (resourcesLeft < 0) {
+		inputChanged.prop('value', 100);
+		resourcesLeft = 0;
+	}
+	$('#' + inputChanged.data('resourceValueHolder')).text(inputChanged.prop('value'));
 	var inputsLeft = 2;
 	var resourceType = inputChanged.data('resourceType');
 	console.log(resourceType);
@@ -112,9 +124,11 @@ function balanceResourceGens(inputChanged) {
 			$(this).prop('value', res);
 			resourcesLeft = resourcesLeft - res;
 			inputsLeft--;
+			$('#' + $(this).data('resourceValueHolder')).text(res);
 		}
 
 	});
+	refreshStats();
 }
 
 function valueToInt(input) {
@@ -148,13 +162,26 @@ function transferResources(castleDestination, resources) {
 function increaseResources() {
 	$('.resourceGen').each(function() {
 		var resourceType = $(this).data('resourceType');
-		$.player.resources[$(this).data('resourceType')] += valueToInt($(this));
-		$("span[data-resource-type='" + resourceType + "']").text($.player.resources[resourceType]);
+		$.player.resources[resourceType] += Math.round((valueToInt($(this)) / 100.0) * $.resourceFixes[resourceType] * $.player.stats["production"]);
 	});
+	$.player.resources["food"] -= $.foodConsumption;
+	refreshResources();
 }
 
 function refreshResources() {
 	$('.resourceCount').each(function() {
 		$(this).text($.player.resources[$(this).data('resourceType')]);
 	});
+}
+
+function refreshStats() {
+	var consumption = valueToInt($('#resourcePercentGold')) * 2.0;
+	if ($.customResource === "wood")
+		consumption += (valueToInt($('#resourcePercentWood')) * 4.0);
+	else
+		consumption += (valueToInt($('#resourcePercentDiamonds')) * 6.0);
+	
+	$.foodConsumption = Math.floor(consumption / 10.0);
+	$('#foodConsumptionValue').text($.foodConsumption);
+	console.log($.foodConsumption);
 }
