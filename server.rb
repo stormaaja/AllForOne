@@ -15,7 +15,7 @@
 require 'sinatra'
 require 'json'
 
-set :bind, '127.0.1.2'
+set :bind, '10.240.200.61'
 set :port, 1233
 set :environment, :development
 
