@@ -97,6 +97,7 @@ $(document).ready(function() {
 
 function connectToServer() {
 	$.network = new Network();
+	$.network.nick = $.player.nick;
 	$.network.onConnected = function() {
 		$('#buttonCloseSettingsDialog').click();
 	}
