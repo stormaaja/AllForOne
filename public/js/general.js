@@ -28,7 +28,13 @@ $(document).ready(function() {
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
 
-	$.player = new Player(generateNick(), 100, 100, "diamonds");
+	if ($.localStorage.isSet("player")) {
+		var player = $.localStorage.get("player");
+		$.player = new Player(player.nick, 100, 100, player.customResource);
+		$.player.resources = player.resources;
+	} else {
+		$.player = new Player(generateNick(), 100, 100, "diamonds");
+	}
 	$.player.castle.selectable = false;
 
 	$('#sendResources').click(function() { 
@@ -89,6 +95,7 @@ $(document).ready(function() {
 
 	//$('#buttonUserSettings').click();
 	refreshStats();
+	refreshResources();
 
 });
 
@@ -187,6 +194,7 @@ function increaseResources() {
 	$.goldConsumption = Math.round((valueToInt($('#resourcePercentFood')) / 100.0) * $.resourceFixes["food"] * $.player.stats["production"]);
 	$.player.resources["gold"] -= $.goldConsumption;
 	refreshResources();
+	$.localStorage.set("player", $.player.simplify());
 }
 
 function refreshResources() {
