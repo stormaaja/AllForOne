@@ -18,31 +18,72 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>MultiManager</title>
+    <title>All for One</title>
     <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-
     <script src="jquery/jquery-2.1.3.min.js"></script>
     <script src="jcanvas/jcanvas.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="js/general.js"></script>
+    <script src="js/network.js"></script>
   </head>
   <body>
     <div class="page">
     	<div id="resourceBar" class="sideBar">
         <div class="sideBarContent">
           <div class="input-group">
-            <input type="number" class="form-control" min="0" /><span class="input-group-addon" id="resource1">Resource 1</span>
+            <input type="number" class="form-control sendInput" min="0" data-resource-type="gold" /><span class="input-group-addon" id="resource1">Gold <span class="resourceCount" data-resource-type="gold">0</span></span>
           </div>
           <div class="input-group">
-            <input type="number" class="form-control" min="0" /><span class="input-group-addon" id="resource2">Resource 2</span>
+            <input type="number" class="form-control sendInput" min="0" data-resource-type="food" /><span class="input-group-addon" id="resource3">Food <span class="resourceCount" data-resource-type="food">0</span></span>
           </div>
           <div class="input-group">
-            <input type="number" class="form-control" min="0" /><span class="input-group-addon" id="resource3">Resource 3</span>
+            <input type="number" class="form-control sendInput" min="0" data-resource-type="wood" /><span class="input-group-addon" id="resource3">Wood <span class="resourceCount" data-resource-type="wood">0</span></span>
+          </div>
+          <div class="input-group">
+            <input type="number" class="form-control sendInput" min="0" data-resource-type="diamonds" /><span class="input-group-addon" id="resource2">Diamonds <span class="resourceCount" data-resource-type="diamonds">0</span></span>
           </div>
 
           <div class="btn-group" role="group" >
             <button type="button" class="btn btn-default" id="sendResources">Send</button>
+          </div>
+
+          <div>Resource generating</div>
+          <div class="row">
+            <div class="col-md-4">Gold</div>
+            <div class="col-md-4">Food</div>
+            <div class="col-md-4 resourceWood">Wood</div>
+            <div class="col-md-4 resourceDiamonds">Diamonds</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4"><input type="number" class="form-control resourceGen" data-resource-type="gold" min="0" value="5" max="15"/></div>
+            <div class="col-md-4"><input type="number" class="form-control resourceGen" data-resource-type="food" min="0" value="5" max="15"/></div>
+            <div class="col-md-4"><input type="number" class="form-control resourceGen resourceWood" data-resource-type="wood" min="0" value="5" max="15"/></div>
+            <div class="col-md-4"><input type="number" class="form-control resourceGen resourceDiamonds" data-resource-type="diamonds" min="0" value="5" max="15"/></div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">Defences:</div>
+            <div class="col-md-3">0</div>
+            <div class="col-md-3">Production:</div>
+            <div class="col-md-3">0</div>
+            <div class="col-md-3">Caravans:</div>
+            <div class="col-md-3">1</div>
+          </div>
+
+          <div class="row">
+            <div class="btn-group col-md-6" role="group" >
+              <button type="button" class="btn btn-default">Defences</button>
+            </div>
+            <div class="btn-group col-md-6" role="group" >
+              <button type="button" class="btn btn-default">Efficience</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="btn-group col-md-6" role="group" >
+            <button type="button" class="btn btn-default">Extra Caravan</button>
           </div>
         </div>
       </div>
