@@ -80,7 +80,7 @@ $(document).ready(function() {
 	}, $.resourceGenInterval);
 
 	setInterval(function() {
-		$.network.checkState($.player.nick);
+		$.network.checkState($.player);
 	}, $.checkStateInterval);
 
 	if ($.player.customResource === "wood")
