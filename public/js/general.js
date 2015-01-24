@@ -27,13 +27,11 @@ $(document).ready(function() {
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
 
-	$.customResource = "diamonds";
-
-	$.player = new Player("user", 100, 100);
+	$.player = new Player("user", 100, 100, "diamonds");
 	$.player.castle.selectable = false;
 
-	$.players[0] = new Player("user2", 500, 100);
-	$.players[1] = new Player("user3", 300, 500);
+	$.players[0] = new Player("user2", 500, 100, "wood");
+	$.players[1] = new Player("user3", 300, 500, "wood");
 
 	$('#sendResources').click(function() { 
 		if ($.sendTo === undefined) {
@@ -76,7 +74,7 @@ $(document).ready(function() {
 			increaseResources();
 	}, $.resourceGenInterval);
 
-	if ($.customResource === "wood")
+	if ($.player.customResource === "wood")
 		$('.resourceDiamonds').remove();
 	else
 		$('.resourceWood').remove();
@@ -117,7 +115,6 @@ function balanceResourceGens(inputChanged) {
 	$('#' + inputChanged.data('resourceValueHolder')).text(inputChanged.prop('value'));
 	var inputsLeft = 2;
 	var resourceType = inputChanged.data('resourceType');
-	console.log(resourceType);
 	$('.resourceGen').each(function() {
 		if ($(this).data('resourceType') !== resourceType) {
 			var res = Math.round(resourcesLeft / inputsLeft);
@@ -178,7 +175,7 @@ function refreshResources() {
 
 function refreshStats() {
 	var consumption = valueToInt($('#resourcePercentGold')) * 2.0;
-	if ($.customResource === "wood")
+	if ($.player.customResource === "wood")
 		consumption += (valueToInt($('#resourcePercentWood')) * 4.0);
 	else
 		consumption += (valueToInt($('#resourcePercentDiamonds')) * 6.0);
@@ -186,5 +183,4 @@ function refreshStats() {
 	$.foodConsumption = Math.floor(consumption / 10.0);
 	$('#foodConsumptionValue').text($.foodConsumption);
 	$('#goldConsumptionValue').text($.goldConsumption);
-	console.log($.foodConsumption);
 }

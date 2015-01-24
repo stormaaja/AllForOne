@@ -10,12 +10,13 @@
  *
 */
 
-function Player(nick, x, y) {
+function Player(nick, x, y, customResource) {
 	this._player = this;
 	this.nick = nick;
 	this.x = x;
 	this.y = y;
 	this.selected = false;
+	this.customResource = customResource;
 	this.stats = { "production": 1, "defences": 0, "caravans": 1 };
 	
 	this.resources = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
@@ -47,13 +48,13 @@ function Player(nick, x, y) {
 	this.toggleSelected = function() {
 		return this.setSelected(!this.selected);
 	};
+	var townImage = this.customResource === "wood" ? 'images/town_wood.png' : 'images/town_sand.png';
+	console.log(this.customResource);
 
-	this.castle = $("canvas").drawArc({
+	this.castle = $("canvas").drawImage({
+		source: townImage,
 		layer: true,
-		fillStyle: "green",
-		x: x, y: y,
-		radius: 50,
-		
+		x: x, y: y,	
 		selectable: true,
 		click: function(layer) {
 			if (!layer.selectable)
