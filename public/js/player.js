@@ -68,6 +68,6 @@ function Player(nick, x, y, nodeType) {
 	this.castle.player = this;
 
 	this.simplify = function() {
-		return { "resources": this.resources, "nick": this.nick, "customResource": this.customResource };
+		return { "resources": this.resources, "nick": this.nick, "customResource": this.customResource, "stats": this.stats };
 	}
 }

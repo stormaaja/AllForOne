@@ -32,6 +32,7 @@ $(document).ready(function() {
 		var player = $.localStorage.get("player");
 		$.player = new Player(player.nick, 100, 100, player.customResource);
 		$.player.resources = player.resources;
+		$.player.stats = player.stats;
 	} else {
 		$.player = new Player(generateNick(), 100, 100, Math.round(Math.random() * 2) == 0 ? "diamonds" : "woods");
 	}
