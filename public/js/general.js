@@ -28,11 +28,11 @@ $(document).ready(function() {
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
 
-	$.player = new Player("user", 100, 100, "diamonds");
+	$.player = new Player(generateNick(), 100, 100, "diamonds");
 	$.player.castle.selectable = false;
 
-	$.players[0] = new Player("user2", 500, 100, "wood");
-	$.players[1] = new Player("user3", 300, 500, "wood");
+	$.players[0] = new Player(generateNick(), 500, 100, "wood");
+	$.players[1] = new Player(generateNick(), 300, 500, "wood");
 
 	$('#sendResources').click(function() { 
 		if ($.sendTo === undefined) {
@@ -197,4 +197,8 @@ function refreshStats() {
 	$.foodConsumption = Math.floor(consumption / 10.0);
 	$('#foodConsumptionValue').text($.foodConsumption);
 	$('#goldConsumptionValue').text($.goldConsumption);
+}
+
+function generateNick() {
+	return "anon" + Math.floor(Math.random() * 100000);
 }
