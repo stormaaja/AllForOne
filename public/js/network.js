@@ -11,11 +11,13 @@
 */
 
 function Network() {
+	this.server = "http://127.0.1.2:1233";
 
 	this.onConnected = function() {};
 	this.onDisconnected = function() {};
 	this.onObjectReceived = function() {};
 	this.onObjectSent = function(object) {};
+	this.onStateReceived = function(state) {};
 	
 	this.send = function(user, object) {
 		console.log("Send " + user + ": " + object);
@@ -24,5 +26,11 @@ function Network() {
 
 	this.connect = function() {
 		this.onConnected();
+	};
+
+	this.checkState = function(nick) {
+		$.get( this.server + "/", function( data ) {
+			this.onStateReceived(data);
+		});
 	};
 }
