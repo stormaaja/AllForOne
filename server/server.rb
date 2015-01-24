@@ -16,8 +16,8 @@ set :bind, '127.0.1.2'
 set :port, 1233
 set :environment, :development
 
-post '/transfer' do
-	puts "From #{params["from"]} To: #{params["to"]}";
+post '/send' do
+	puts "From #{params["from"]} To: #{params["to"]} - #{params["object"]}";
 	result = { :result_code => 0 }
 	result.to_json
 end
