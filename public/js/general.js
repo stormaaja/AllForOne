@@ -89,6 +89,9 @@ $(document).ready(function() {
 		$('.resourceWood').remove();
 
 	$('#buttonSave').click(function() {
+		$.player.customResource = $('#dropdownClass').data('selectedClass');
+		$.player.nick = $('#username').prop('value');
+		$.localStorage.set("player", $.player.simplify());
 		connectToServer();
 	});
 
@@ -97,6 +100,14 @@ $(document).ready(function() {
 	//$('#buttonUserSettings').click();
 	refreshStats();
 	refreshResources();
+
+	$(".dropdown-menu li a").click(function(){
+		$('#dropdownClass').data('selectedClass', $(this).data('value'));
+		$('#dropdownMenuClass').text($(this).text());
+   	});
+
+   	$('#username').prop('value', $.player.nick);
+   	$('#dropdownClass').data('selectedClass', $.player.customResource);
 
 });
 
@@ -120,7 +131,7 @@ function connectToServer() {
 				$.players = [];
 				$.each(this.players, function() {
 					if ($.player.nick !== this.nick)
-						$.players[$.players.length] = new Player(this.nick, (($.players.length + 1) % 4) * 200 + 100, (($.players.length + 1) / 4) * 100 + 100, this.playertype);
+						$.players[$.players.length] = new Player(this.nick, (($.players.length + 1) % 4) * 200 + 150, (($.players.length + 1) / 4) * 200 + 100, this.playertype);
 				});
 			}
 		});
