@@ -38,8 +38,6 @@ html, body {
 .gameWorld {
 	position: relative;
 	margin-left: 300px;
-	height: 100%;
-	width: 100%;
 }
 
 .row {
