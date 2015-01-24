@@ -18,6 +18,7 @@ function Network() {
 	this.onObjectReceived = function() {};
 	this.onObjectSent = function(object) {};
 	this.onStateReceived = function(state) {};
+	this.nick = "anonymous";
 	
 	this.send = function(user, object) {
 		console.log("Send " + user + ": " + object);
@@ -29,8 +30,9 @@ function Network() {
 	};
 
 	this.checkState = function(nick) {
-		$.get( this.server + "/", function( data ) {
-			this.onStateReceived(data);
+		var network = this;
+		$.get(this.server + "/state/" + this.nick, function(data) {
+			network.onStateReceived(JSON.parse(data));
 		});
 	};
 }
