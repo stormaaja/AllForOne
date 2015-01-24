@@ -53,7 +53,7 @@ $(document).ready(function() {
 			if (Object.size(resources) > 0) {
 				refreshResources();
 				transferResources($.sendTo, resources);
-				$.network.send($.sendTo.nick, resources);
+				$.network.send($.sendTo.nick, { "operation": "transfer", "resources": resources, "from": $.player.nick });
 			}
 		}
 	});
