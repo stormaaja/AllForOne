@@ -10,43 +10,109 @@
  *
 */
 
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key))
+			size++;
+    }
+    return size;
+};
+
 $(document).ready(function() {
-	$.server = "http://127.0.1.1:1233"
-	$.fps = 30;
-	$.movingObjects = [];
-
-	//ar socket = new WebSocket("ws://localhost/socketserver", "multimanager");
-
-	addCastle(100, 100);
+	$.maxResources = 15;
+	$.resourceGenInterval = 3000;
+	$.player = addCastle(100, 100);
+	$.customResource = "diamonds";
 	addCastle(500, 100);
 	addCastle(300, 500);
+	$.resources = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 }
 
 	$('#sendResources').click(function() { 
-		var layers = $('canvas').getLayers(function(layer) {
-			return (layer.selected === true);
-		});
-		if (layers.length == 2) {
-			$.post( $.server + "/transfer",
-				{
-					"to": "0",
-					"from": "1"
-				},
-				function(data) {
-					console.log(data);
-					animateTransferResources(layers[0], layers[1]);
-				}
-			).fail(function() {
-				alert( "error" );
-			});
+		if ($.sendTo === undefined) {
+			return;
 		}
+		else {
+			resources = {};
+			$('.sendInput').each(function() {
+				var key = $(this).data('resourceType');
+				var amount = valueToInt($(this));
+				if (amount > 0) {
+					resources[key] = amount;
+					$.resources[key] -= amount;
+					$(this).prop('value', 0);
+				}
+			});
+
+			if (Object.size(resources) > 0) {
+				refreshResources();
+				transferResources($.sendTo, resources);
+			}
+		}
+	});
+
+	$.each($('.resourceGen'), function(index, value) {
+		$(value).change(function() {
+			balanceResourceGens($(this));
+		});
+	});
+
+	$('.sendInput').change(function() {
+		var val = valueToInt($(this));
+		var key = $(this).data('resourceType');
+		if (val > 0 && val > $.resources[key])
+			$(this).prop('value', val - 1);
+	});
+
+	setInterval(function() {
+			increaseResources();
+	}, $.resourceGenInterval);
+
+	if ($.customResource === "wood")
+		$('.resourceDiamonds').remove();
+	else
+		$('.resourceWood').remove();
+
+	$('#buttonJoin').click(function() {
+		$.network = new Network();
+		$.network.onConnected = function() {
+			$('#buttonCloseJoinDialog').click();
+		}
+		$.network.connect();
 	});
 });
 
-function animateTransferResources(castleFrom, castleDestination) {
+
+function showError(message, object) {
+	alert(message);
+}
+
+function balanceResourceGens(inputChanged) {
+	var resourcesLeft = $.maxResources - valueToInt(inputChanged);
+	var inputsLeft = 2;
+	var resourceType = inputChanged.data('resourceType');
+	console.log(resourceType);
+	$('.resourceGen').each(function() {
+		if ($(this).data('resourceType') !== resourceType) {
+			var res = Math.round(resourcesLeft / inputsLeft);
+			$(this).prop('value', res);
+			resourcesLeft = resourcesLeft - res;
+			inputsLeft--;
+		}
+
+	});
+}
+
+function valueToInt(input) {
+	return parseInt(input.prop('value'));
+}
+
+function transferResources(castleDestination, resources) {
+	console.log(resources);
 	$('canvas').drawRect({
 		layer: true,
 		fillStyle: '#000',
-		x: castleFrom.x, y: castleFrom.y,
+		x: $.player.x, y: $.player.y,
 		width: 25,
 		height: 25
 	});
@@ -54,29 +120,66 @@ function animateTransferResources(castleFrom, castleDestination) {
 	$('canvas').animateLayer(-1, {
 			x: castleDestination.x,
 			y: castleDestination.y
-		}, 10000, function(layer) {
-			$(this).removeLayer(layer);
-			$('canvas').drawLayers();
+		}, 10000,
+		function(layer) {
+			$('canvas').animateLayer(layer, {
+				x: $.player.x,
+				y: $.player.y
+			}, 10000, function(layer) {
+				$(this).removeLayer(layer);
+				$(this).drawLayers();
+			})
 		});
 }
 
 function addCastle(x, y) {
-	$("canvas").drawArc({
+	return $("canvas").drawArc({
 		layer: true,
 		fillStyle: "green",
 		x: x, y: y,
 		radius: 50,
 		selected: false,
 		click: function(layer) {
-			layer.selected = !layer.selected;
-			if (layer.selected) {
-				layer.shadowBlur = 20;
-				layer.shadowColor = "blue";
-			} else {
-				layer.shadowBlur = 0;
-				layer.shadowColor = "";
-			}
+			if (layer === $.player)
+				return;
+			
+			if ($.sendTo !== undefined && $.sendTo !== layer)
+				$.sendTo.toggleSelected();
+			layer.toggleSelected();
+			if (layer.selected)
+				$.sendTo = layer;
+			else
+				$.sendTo = undefined;
+			
 			$('canvas').drawLayers();
+		},
+		setSelected: function(val) {
+			this.selected = val;
+			if (this.selected) {
+				this.shadowBlur = 20;
+				this.shadowColor = "blue";
+			} else {
+				this.shadowBlur = 0;
+				this.shadowColor = "";
+			}
+			return this.selected;
+		},
+		toggleSelected: function() {
+			return this.setSelected(!this.selected);
 		}
+	}).getLayer(-1);
+}
+
+function increaseResources() {
+	$('.resourceGen').each(function() {
+		var resourceType = $(this).data('resourceType');
+		$.resources[$(this).data('resourceType')] += valueToInt($(this));
+		$("span[data-resource-type='" + resourceType + "']").text($.resources[resourceType]);
+	});
+}
+
+function refreshResources() {
+	$('.resourceCount').each(function() {
+		$(this).text($.resources[$(this).data('resourceType')]);
 	});
 }
