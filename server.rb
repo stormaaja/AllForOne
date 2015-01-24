@@ -27,7 +27,7 @@ end
 
 get '/state/:user_id' do |userId|
 	puts "State of #{userId}"
-	result = { :operation => "transfer", :resources => { :wood => 99, :gold => 98, :food => 97, :diamonds => 96 } }
+	result = [ { :operation => "transfer", :resources => { :wood => 99, :gold => 98, :food => 97, :diamonds => 96 } } ]
 	result.to_json
 end
 
