@@ -23,6 +23,7 @@ $(document).ready(function() {
 	$.maxResources = 100;
 	$.tax = 0;
 	$.resourceGenInterval = 3000;
+	$.checkStateInterval = 1000;
 	$.players = [];
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
@@ -74,6 +75,10 @@ $(document).ready(function() {
 			increaseResources();
 	}, $.resourceGenInterval);
 
+	setInterval(function() {
+		$.network.checkState($.player.nick);
+	}, $.checkStateInterval);
+
 	if ($.player.customResource === "wood")
 		$('.resourceDiamonds').remove();
 	else
@@ -95,6 +100,14 @@ function connectToServer() {
 	$.network.onConnected = function() {
 		$('#buttonCloseSettingsDialog').click();
 	}
+	$.network.onStateReceived = function(state) {
+		if (state["operation"] === "transfer") {
+			$.each(state.resources, function(key, value) {
+				$.player.resources[key] += value;
+			});
+			refreshResources();
+		}
+	};
 	$.network.connect();
 }
 
