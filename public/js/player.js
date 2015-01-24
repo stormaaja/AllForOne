@@ -18,6 +18,7 @@ function Player(nick, x, y, nodeType) {
 	this.selected = false;
 	this.customResource = nodeType;
 	this.stats = { "production": 1, "defences": 0, "caravans": 1 };
+	this.productionRates = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
 	
 	this.resources = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
 
