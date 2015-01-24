@@ -66,4 +66,8 @@ function Player(nick, x, y, nodeType) {
 		}
 	}).getLayer(-1);
 	this.castle.player = this;
+
+	this.simplify = function() {
+		return { "resources": this.resources, "nick": this.nick, "customResource": this.customResource };
+	}
 }
