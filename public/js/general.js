@@ -33,7 +33,7 @@ $(document).ready(function() {
 		$.player = new Player(player.nick, 100, 100, player.customResource);
 		$.player.resources = player.resources;
 	} else {
-		$.player = new Player(generateNick(), 100, 100, "diamonds");
+		$.player = new Player(generateNick(), 100, 100, Math.round(Math.random() * 2) == 0 ? "diamonds" : "woods");
 	}
 	$.player.castle.selectable = false;
 
@@ -119,7 +119,7 @@ function connectToServer() {
 				$.players = [];
 				$.each(this.players, function() {
 					if ($.player.nick !== this.nick)
-						$.players[$.players.length] = new Player(this.nick, $.players.length % 2 * 250 + 250, ($.players.length + 1) % 2 * 300 + 100, this.playertype);
+						$.players[$.players.length] = new Player(this.nick, (($.players.length + 1) % 4) * 200 + 100, (($.players.length + 1) / 4) * 100 + 100, this.playertype);
 				});
 			}
 		});
