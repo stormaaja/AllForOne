@@ -19,6 +19,8 @@ set :bind, '127.0.1.2'
 set :port, 1233
 set :environment, :development
 
+playerData = Hash.new
+
 post '/send/:destination' do |destinationNick|
 	puts "Object #{params["object"]} To: #{destinationNick}";
 	result = { :result_code => 0 }
@@ -26,9 +28,22 @@ post '/send/:destination' do |destinationNick|
 end
 
 get '/state/:user_id' do |userId|
-	puts "State of #{userId}"
-	result = [ { :operation => "transfer", :resources => { :wood => 99, :gold => 98, :food => 97, :diamonds => 96 } } ]
-	result.to_json
+	result = [  ]
+	if playerData[userId].nil?
+		puts "New user #{userId}";
+		playerData[userId] = [
+			{ :operation => "transfer", :resources => { :wood => 99, :gold => 98, :food => 97, :diamonds => 96 } },
+			{ :operation => "playerlist", :players => 
+				[ 
+					{ :nick => "jesh1", :playerType => "king" },
+					{ :nick => "jesh2", :playerType => "wood" }
+				]
+			}
+		]
+	end
+	result = playerData[userId].to_json
+	playerData[userId] = []
+	result
 end
 
 get '/' do
