@@ -97,48 +97,54 @@
               <button type="button" class="btn btn-default">Efficience</button>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="btn-group col-md-6" role="group" >
-            <button type="button" class="btn btn-default">Extra Caravan</button>
+        
+          <div class="row">
+            <div class="btn-group col-md-6" role="group" >
+              <button type="button" class="btn btn-default">Extra Caravan</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="buttonUserSettings">
-          User Settings
-        </button>
+          <div class="row">
+            <!-- Button trigger modal -->
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" id="buttonUserSettings">
+                User Settings
+              </button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">User settings</h4>
-              </div>
-              <div class="modal-body">
-                <div class="input-group">
-                  <input type="text" class="form-control" id="username" /><span class="input-group-addon">Username</span>
+              <!-- Modal -->
+              <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">User settings</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="username" /><span class="input-group-addon">Username</span>
+                      </div>
+                      <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                          Class
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">King</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Wood</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Diamon</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" id="buttonCloseSettingsDialog">Close</button>
+                      <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
+                    </div>
+                  </div>
                 </div>
-                <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                    Class
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">King</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Wood</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Diamon</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="buttonCloseSettingsDialog">Close</button>
-                <button type="button" class="btn btn-primary" id="buttonSave">Save</button>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>
