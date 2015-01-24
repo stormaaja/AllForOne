@@ -47,7 +47,6 @@ function Player(nick, x, y, customResource) {
 		return this.setSelected(!this.selected);
 	};
 	var townImage = this.customResource === "wood" ? 'images/town_wood.png' : 'images/town_sand.png';
-	console.log(this.customResource);
 
 	this.castle = $("canvas").drawImage({
 		source: townImage,
