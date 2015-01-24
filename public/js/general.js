@@ -32,7 +32,7 @@ $(document).ready(function() {
 	$.player.castle.selectable = false;
 
 	$.players[0] = new Player(generateNick(), 500, 100, "wood");
-	$.players[1] = new Player(generateNick(), 300, 500, "wood");
+	$.players[1] = new Player(generateNick(), 300, 500, "king");
 
 	$('#sendResources').click(function() { 
 		if ($.sendTo === undefined) {
@@ -102,12 +102,14 @@ function connectToServer() {
 		$('#buttonCloseSettingsDialog').click();
 	}
 	$.network.onStateReceived = function(state) {
-		if (state["operation"] === "transfer") {
-			$.each(state.resources, function(key, value) {
-				$.player.resources[key] += value;
-			});
-			refreshResources();
-		}
+		$(state).each(function() {
+			if (this["operation"] === "transfer") {
+				$.each(this.resources, function(key, value) {
+					$.player.resources[key] += value;
+				});
+				refreshResources();
+			}
+		});
 	};
 	$.network.connect();
 }
