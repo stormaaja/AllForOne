@@ -32,10 +32,14 @@ post '/send/:destination' do |destinationNick|
 end
 
 post '/connect' do
-	puts "New user #{params["nick"]} as #{params["playertype"]}"
-	players.push({ :nick => params["nick"], :playertype => params["playertype"] })
-	playerData.each do |nick, data|
-		playerData[nick].push({ :operation => "playerlist", :players =>  players })
+	if players[params["nick"]].nil?
+		puts "New user #{params["nick"]} as #{params["playertype"]}"
+		players.push({ :nick => params["nick"], :playertype => params["playertype"] })
+		playerData.each do |nick, data|
+			playerData[nick].push({ :operation => "playerlist", :players =>  players })
+		end
+	else
+		puts "User #{params["nick"]} comes back";
 	end
 	""
 end
