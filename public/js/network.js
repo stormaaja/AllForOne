@@ -23,18 +23,21 @@ function Network() {
 	this.send = function(user, object) {
 		var network = this;
 		$.post(this.server + "/send/" + user,
-			{ "object": object },
+			{ "object": JSON.stringify(object) },
 		 	function(data) {
 				network.onObjectSent(object);
 		});
 
-
-		console.log("Send " + user + ": " + object);
 		this.onObjectSent(object);
 	};
 
-	this.connect = function() {
-		this.onConnected();
+	this.connect = function(nick, playertype) {
+		var network = this;
+		$.post(this.server + "/connect",
+			{ "nick": nick, "playertype": playertype },
+		 	function(data) {
+				network.onConnected();
+		});
 	};
 
 	this.checkState = function(nick) {
