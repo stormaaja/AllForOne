@@ -20,24 +20,32 @@ set :port, 1233
 set :environment, :development
 
 playerData = Hash.new
+players = []
 
 post '/send/:destination' do |destinationNick|
 	puts "Object #{params["object"]} To: #{destinationNick}";
-	result = { :result_code => 0 }
-	result.to_json
+	if playerData[destinationNick].nil?
+		playerData[destinationNick] = []
+	end
+	playerData[destinationNick].push(JSON.parse(params["object"]))
+	""
+end
+
+post '/connect' do
+	puts "New user #{params["nick"]} as #{params["playertype"]}"
+	players.push({ :nick => params["nick"], :playertype => params["playertype"] })
+	playerData.each do |nick, data|
+		playerData[nick].push({ :operation => "playerlist", :players =>  players })
+	end
+	""
 end
 
 get '/state/:user_id' do |userId|
 	result = [  ]
 	if playerData[userId].nil?
-		puts "New user #{userId}";
 		playerData[userId] = [
-			{ :operation => "transfer", :resources => { :wood => 99, :gold => 98, :food => 97, :diamonds => 96 } },
 			{ :operation => "playerlist", :players => 
-				[ 
-					{ :nick => "jesh1", :playerType => "king" },
-					{ :nick => "jesh2", :playerType => "wood" }
-				]
+				players
 			}
 		]
 	end
