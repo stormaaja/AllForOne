@@ -165,6 +165,8 @@ function increaseResources() {
 		$.player.resources[resourceType] += Math.round((valueToInt($(this)) / 100.0) * $.resourceFixes[resourceType] * $.player.stats["production"]);
 	});
 	$.player.resources["food"] -= $.foodConsumption;
+	$.goldConsumption = Math.round((valueToInt($('#resourcePercentFood')) / 100.0) * $.resourceFixes["food"] * $.player.stats["production"]);
+	$.player.resources["gold"] -= $.goldConsumption;
 	refreshResources();
 }
 
@@ -183,5 +185,6 @@ function refreshStats() {
 	
 	$.foodConsumption = Math.floor(consumption / 10.0);
 	$('#foodConsumptionValue').text($.foodConsumption);
+	$('#goldConsumptionValue').text($.goldConsumption);
 	console.log($.foodConsumption);
 }
