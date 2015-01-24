@@ -36,10 +36,30 @@ function Player(nick, x, y, nodeType) {
 	this.setSelected = function(val) {
 		this.selected = val;
 		if (this.selected) {
-
+			$.pointer = $('canvas').drawImage({
+				source: 'images/pointer.png',
+				layer: true,
+				x: this.x,
+				increasing: true,
+				y:this.y,
+				animate: function() {
+					this.increasing = !this.increasing;
+					if (this.increasing) {
+						$('canvas').animateLayer(this, {
+							y: this.y + 50
+						}, function(layer) { layer.animate() });
+					} else {
+						$('canvas').animateLayer(this, {
+							y: this.y - 50
+						}, function(layer) { layer.animate() });
+					}
+				} }).getLayer(-1);
+			$.pointer.animate();
+			 
 		} else {
-
+			$('canvas').removeLayer($.pointer);
 		}
+		$('canvas').drawLayers();
 		return this.selected;
 	};
 
