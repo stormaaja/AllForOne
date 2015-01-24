@@ -36,11 +36,9 @@ function Player(nick, x, y, customResource) {
 	this.setSelected = function(val) {
 		this.selected = val;
 		if (this.selected) {
-			this.castle.shadowBlur = 20;
-			this.castle.shadowColor = "blue";
+
 		} else {
-			this.castle.shadowBlur = 0;
-			this.castle.shadowColor = "";
+
 		}
 		return this.selected;
 	};
