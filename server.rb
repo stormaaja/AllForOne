@@ -7,6 +7,9 @@
 # You should have received a copy of the license along with this
 # work.  If not, see <http://creativecommons.org/licenses/by-sa/3.0/>.
 # 
+# This Server Backend application is not secured or user inputs aren't
+# sanitized in any way. Use it only in your own risk and in controlled
+# environment.
 #
 
 require 'sinatra'
@@ -24,8 +27,12 @@ end
 
 get '/state/:user_id' do |userId|
 	puts "State of #{userId}"
-	result = { :result_code => 0 }
+	result = { :operation => "transfer", :resources => { :wood => 99, :gold => 98, :food => 97, :diamonds => 96 } }
 	result.to_json
+end
+
+get '/' do
+  File.read(File.join('public', 'index.html'))
 end
 
 # Others
