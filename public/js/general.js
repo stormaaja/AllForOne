@@ -31,9 +31,6 @@ $(document).ready(function() {
 	$.player = new Player(generateNick(), 100, 100, "diamonds");
 	$.player.castle.selectable = false;
 
-	$.players[0] = new Player(generateNick(), 500, 100, "wood");
-	$.players[1] = new Player(generateNick(), 300, 500, "king");
-
 	$('#sendResources').click(function() { 
 		if ($.sendTo === undefined) {
 			return;
@@ -108,6 +105,14 @@ function connectToServer() {
 					$.player.resources[key] += value;
 				});
 				refreshResources();
+			} else if (this["operation"] === "playerlist") {
+				$($.players).each(function() {
+					$('canvas').removeLayer(this.castle);
+				});
+				$.players = [];
+				$.each(this.players, function() {
+					$.players[$.players.length] = new Player(this.nick, $.players.length % 2 * 250 + 250, ($.players.length + 1) % 2 * 300 + 100, this.playerType);
+				});
 			}
 		});
 	};
