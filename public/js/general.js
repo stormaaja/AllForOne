@@ -22,7 +22,7 @@ Object.size = function(obj) {
 $(document).ready(function() {
 	$.maxResources = 100;
 	$.tax = 0;
-	$.resourceGenInterval = 3000;
+	$.resourceGenInterval = 10000;
 	$.checkStateInterval = 1000;
 	$.players = [];
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
@@ -47,7 +47,7 @@ $(document).ready(function() {
 			$('.sendInput').each(function() {
 				var key = $(this).data('resourceType');
 				var amount = valueToInt($(this));
-				if (amount > 0) {
+				if (amount > 0 && amount <= $.player.resources[key]) {
 					resources[key] = amount;
 					$.player.resources[key] -= amount;
 					$(this).prop('value', 0);
@@ -108,7 +108,7 @@ $(document).ready(function() {
 
    	$('#username').prop('value', $.player.nick);
    	$('#dropdownClass').data('selectedClass', $.player.customResource);
-
+   	calculateResourceRatios();
 });
 
 function connectToServer() {
@@ -162,11 +162,13 @@ function balanceResourceGens(inputChanged) {
 			$(this).prop('value', res);
 			resourcesLeft = resourcesLeft - res;
 			inputsLeft--;
+			// $('#' + $(this).data('resourceValueHolder')).text((Math.round(res / 100.0) * $.resourceFixes[$(this).data('resourceType')] * $.player.stats["production"]));
 			$('#' + $(this).data('resourceValueHolder')).text(res);
 		}
 
 	});
 	refreshStats();
+	calculateResourceRatios();
 }
 
 function valueToInt(input) {
@@ -197,10 +199,19 @@ function transferResources(castleDestination, resources) {
 		});
 }
 
-function increaseResources() {
+function calculateResourceRatios() {
 	$('.resourceGen').each(function() {
 		var resourceType = $(this).data('resourceType');
-		$.player.resources[resourceType] += Math.round((valueToInt($(this)) / 100.0) * $.resourceFixes[resourceType] * $.player.stats["production"]);
+		$.player.productionRates[resourceType] = Math.round((valueToInt($(this)) / 100.0) * $.resourceFixes[resourceType] * $.player.stats["production"]);
+		$('#' + $(this).data('resourceValueHolder')).text($.player.productionRates[resourceType]);
+	});
+}
+
+function increaseResources() {
+	calculateResourceRatios();
+	$('.resourceGen').each(function() {
+		var resourceType = $(this).data('resourceType');
+		$.player.resources[resourceType] += $.player.productionRates[resourceType];
 	});
 	$.player.resources["food"] -= $.foodConsumption;
 	$.goldConsumption = Math.round((valueToInt($('#resourcePercentFood')) / 100.0) * $.resourceFixes["food"] * $.player.stats["production"]);
