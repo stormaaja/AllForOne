@@ -111,12 +111,13 @@ function connectToServer() {
 				});
 				$.players = [];
 				$.each(this.players, function() {
-					$.players[$.players.length] = new Player(this.nick, $.players.length % 2 * 250 + 250, ($.players.length + 1) % 2 * 300 + 100, this.playerType);
+					if ($.player.nick !== this.nick)
+						$.players[$.players.length] = new Player(this.nick, $.players.length % 2 * 250 + 250, ($.players.length + 1) % 2 * 300 + 100, this.playertype);
 				});
 			}
 		});
 	};
-	$.network.connect();
+	$.network.connect($.player.nick, $.player.customResource);
 }
 
 
