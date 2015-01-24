@@ -73,13 +73,16 @@ $(document).ready(function() {
 	else
 		$('.resourceWood').remove();
 
-	$('#buttonJoin').click(function() {
+	$('#buttonSave').click(function() {
 		$.network = new Network();
 		$.network.onConnected = function() {
-			$('#buttonCloseJoinDialog').click();
+			$('#buttonCloseSettingsDialog').click();
 		}
 		$.network.connect();
 	});
+
+	$('#buttonUserSettings').click();
+
 });
 
 
