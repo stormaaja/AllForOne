@@ -24,12 +24,16 @@ $(document).ready(function() {
 	$.tax = 0;
 	$.resourceGenInterval = 10000;
 	$.checkStateInterval = 1000;
+	$.checkEventsInterval = 1000;
 	$.players = [];
 	$.king = undefined;
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
 	$.resourceConsumptionFixesForMoney = { "food": 1.0, "wood": 1.5, "diamonds": 6.0 };
 	$.resourceIcons = { "gold": "images/coin.png", "diamonds": "images/diamond.png", "food": "images/food.png", "wood": "images/wood.png" };
+
+	$.events = [ { "probability": 10.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
+
 	var firstTime = true;
 
 	if ($.localStorage.isSet("player")) {
@@ -93,6 +97,14 @@ $(document).ready(function() {
 		setInterval(function() {
 			$.network.checkState($.player);
 		}, $.checkStateInterval);
+
+		setInterval(function() {
+			$.each($.events, function() {
+				var prop = Math.random() * 100;
+				if (prop < this.probability)
+					this.eventFunction();
+			});
+		}, $.checkEventsInterval);
 	}
 
 	if ($.player.customResource === "wood")
@@ -122,6 +134,22 @@ $(document).ready(function() {
    	$('#username').prop('value', $.player.nick);
    	$('#dropdownClass').data('selectedClass', $.player.customResource);
 });
+
+function bandidosFunction() {
+	if ($.player === undefined)
+		return;
+	$('canvas').drawImage( {
+		source: 'images/bandidos.png',
+		layer: true,
+		x: $.player.castle.x - 100,
+		y: $.player.castle.y,
+	} );
+	$('canvas').animateLayer(-1, {
+		x: $.player.castle.x
+	}, 10000, function(layer) {
+		$('canvas').removeLayer(layer);
+	})
+}
 
 function connectToServer() {
 	$.network = new Network();
