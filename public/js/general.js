@@ -235,12 +235,10 @@ function valueToInt(input) {
 }
 
 function transferResources(castleDestination, resources) {
-	$('canvas').drawRect({
+	$('canvas').drawImage({
+		source: 'images/caravan.png',
 		layer: true,
-		fillStyle: '#000',
 		x: $.player.x, y: $.player.y,
-		width: 25,
-		height: 25
 	});
 	$.player.stats["caravans"] -= 1;
 	refreshStats();
