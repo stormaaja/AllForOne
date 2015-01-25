@@ -24,7 +24,7 @@ $(document).ready(function() {
 	$.tax = 0;
 	$.resourceGenInterval = 10000;
 	$.checkStateInterval = 1000;
-	$.checkEventsInterval = 1000;
+	$.checkEventsInterval = 10000;
 	$.players = [];
 	$.king = undefined;
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
@@ -32,7 +32,7 @@ $(document).ready(function() {
 	$.resourceConsumptionFixesForMoney = { "food": 1.0, "wood": 1.5, "diamonds": 6.0 };
 	$.resourceIcons = { "gold": "images/coin.png", "diamonds": "images/diamond.png", "food": "images/food.png", "wood": "images/wood.png" };
 
-	$.events = [ { "probability": 1.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
+	$.events = [ { "probability": 10.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
 	$.winningEvents = [ { "name": "Win by diamonds", checkTerms: function() { checkDiamondsWin(); } }];
 	$.losingEvents = [ { "name": "Lose by starve", checkTerms: function() { checkStarving(); } }];
 
@@ -156,6 +156,13 @@ function bandidosFunction() {
 	$('canvas').animateLayer(-1, {
 		x: $.player.castle.x
 	}, 10000, function(layer) {
+		var percent = 45.0 - $.player.stats["defences"] * 10;
+		if (percent < 0.0)
+			return;
+		$.player.resources["gold"] -= Math.floor($.player.resources["gold"] * (percent / 100.0));
+		$.player.resources["food"] -= Math.floor($.player.resources["food"] * (percent / 100.0));
+		$.player.resources["wood"] -= Math.floor($.player.resources["wood"] * (percent / 100.0));
+		$.player.resources["diamonds"] -= Math.floor($.player.resources["diamonds"] * (percent / 100.0));
 		$('canvas').removeLayer(layer);
 	})
 }
