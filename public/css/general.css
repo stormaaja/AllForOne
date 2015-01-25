@@ -21,7 +21,7 @@ html, body {
 }
 
 .sideBar {
-	width: 300px;
+	width: 350px;
 	height: 100%;
 	float: left;
 	background-color: rgba(255, 255, 255, 0.4);
@@ -38,7 +38,7 @@ html, body {
 
 .gameWorld {
 	position: relative;
-	margin-left: 300px;
+	margin-left: 350px;
 }
 
 .row {
