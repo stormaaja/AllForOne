@@ -38,6 +38,12 @@ def getPlayer(players, nick)
 	nil
 end
 
+def addPlayersDataToAll(playerData, players)
+	playerData.each do |nick, data|
+		playerData[nick].push({ :operation => "playerlist", :players =>  players })
+	end
+end
+
 post '/send/:destination' do |destinationNick|
 	puts "Object #{params["object"]} To: #{destinationNick}";
 	if playerData[destinationNick].nil?
@@ -56,9 +62,7 @@ post '/connect' do
 	else
 		puts "New user #{params["nick"]} as #{params["playertype"]}"
 		players.push({ :nick => params["nick"], :playertype => params["playertype"] })
-		playerData.each do |nick, data|
-			playerData[nick].push({ :operation => "playerlist", :players =>  players })
-		end
+		addPlayersDataToAll(playerData, players)
 	end
 	""
 end
@@ -67,9 +71,7 @@ get '/state/:user_id' do |userId|
 	result = [  ]
 	if playerData[userId].nil?
 		playerData[userId] = [
-			{ :operation => "playerlist", :players => 
-				players
-			}
+			{ :operation => "refresh_needed" }
 		]
 	end
 	result = playerData[userId].to_json
