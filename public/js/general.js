@@ -190,6 +190,7 @@ function connectToServer() {
 					$.player.resources[key] += value;
 					createReceivedIndicator($.player, key, index++);
 				});
+				$('#receiveStuffSound')[0].play();
 				refreshResources();
 			} else if (this["operation"] === "playerlist") {
 				$($.players).each(function() {
