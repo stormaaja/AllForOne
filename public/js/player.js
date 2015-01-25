@@ -38,6 +38,8 @@ function Player(nick, x, y, nodeType) {
 	this.setSelected = function(val) {
 		this.selected = val;
 		if (this.selected) {
+			if ($.player.customResource === "king")
+				setInfo(this);
 			$.pointer = $('canvas').drawImage({
 				source: 'images/pointer.png',
 				layer: true,
@@ -59,6 +61,8 @@ function Player(nick, x, y, nodeType) {
 			$.pointer.animate();
 			 
 		} else {
+			if ($.player.customResource === "king")
+				setInfo(undefined);
 			$('canvas').removeLayer($.pointer);
 		}
 		$('canvas').drawLayers();

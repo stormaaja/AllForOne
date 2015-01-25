@@ -25,6 +25,7 @@ $(document).ready(function() {
 	$.resourceGenInterval = 10000;
 	$.checkStateInterval = 1000;
 	$.players = [];
+	$.king = undefined;
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
 	$.resourceConsumptionFixesForMoney = { "food": 1.0, "wood": 1.5, "diamonds": 6.0 };
@@ -143,15 +144,34 @@ function connectToServer() {
 				});
 				$.players = [];
 				$.each(this.players, function() {
-					if ($.player.nick !== this.nick)
-						$.players[$.players.length] = new Player(this.nick, (($.players.length + 1) % 4) * 200 + 150, (($.players.length + 1) / 4) * 200 + 100, this.playertype);
+					if ($.player.nick !== this.nick) {
+						var player = new Player(this.nick, (($.players.length + 1) % 4) * 200 + 150, (($.players.length + 1) / 4) * 200 + 100, this.playertype);
+						$.players[$.players.length] = player;
+						if (this.playertype === "king")
+							$.king = player;
+
+					}
 				});
 			} else if (this["operation"] === "refresh_needed") {
 				location.reload();
+			} else if (this["operation"] === "resource_update") {
+				var player = findPlayer(this.from);
+				if (player !== undefined)
+					player.resources = this.resources;
 			}
 		});
 	};
 	$.network.connect($.player.nick, $.player.customResource);
+}
+
+function findPlayer(nick) {
+	var player = undefined;
+	$.each($.players, function() {
+		if (this.nick === nick) {
+			player = this;
+		}
+	});
+	return player;
 }
 
 function createReceivedIndicator(player, resource, index) {
@@ -274,6 +294,22 @@ function increaseResources() {
 	$.player.resources["gold"] += $.player.productionRates["gold"] - $.player.consumptionRates["gold"];
 	refreshResources();
 	$.localStorage.set("player", $.player.simplify());
+	if ($.king !== undefined) {
+		$.network.send($.king.nick, { "operation": "resource_update", "resources": $.player.resources, "from": $.player.nick });
+	}
+}
+
+function setInfo(player) {
+	if (player === undefined) {
+		$('#playerInfo').hide();
+	} else {
+		$('#playerInfo').show();
+		$('#otherPlayerName').text(player.nick);
+		$('#otherPlayerGold').text(player.resources["gold"]);
+		$('#otherPlayerFood').text(player.resources["food"]);
+		$('#otherPlayerWood').text(player.resources["wood"]);
+		$('#otherPlayerDiamonds').text(player.resources["diamonds"]);
+	}
 }
 
 function refreshResources() {
