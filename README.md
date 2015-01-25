@@ -1,6 +1,6 @@
 # AllForOne
 
-Requirements can be found in public/requirements.html
+Client-side requirements can be found in public/requirements.html
 
 ## Setup
 
