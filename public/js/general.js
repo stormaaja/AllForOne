@@ -34,6 +34,7 @@ $(document).ready(function() {
 
 	$.events = [ { "probability": 1.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
 	$.winningEvents = [ { "name": "Win by diamonds", checkTerms: function() { checkDiamondsWin(); } }];
+	$.losingEvents = [ { "name": "Lose by starve", checkTerms: function() { checkStarving(); } }];
 
 	var firstTime = true;
 
@@ -331,7 +332,12 @@ function increaseResources() {
 	if ($.king !== undefined) {
 		$.network.send($.king.nick, { "operation": "resource_update", "resources": $.player.resources, "from": $.player.nick });
 	}
-
+	$.each($.winningEvents, function() {
+		this.checkTerms();
+	});
+	$.each($.losingEvents, function() {
+		this.checkTerms();
+	});
 }
 
 function setInfo(player) {
@@ -368,4 +374,16 @@ function generateNick() {
 function checkDiamondsWin() {
 	if ($.player.customResource === "king" && $.player.resources["diamonds"] > 1000)
 		alert("Congrats. You win.");
+}
+
+function checkStarving() {
+	if ($.player.resources["food"] < 0) {
+		alert("Your people died starving. Let's try again.");
+		$.player.stats = { "production": 1, "defences": 0, "caravans": 1 };
+		$.player.productionRates = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
+		$.player.consumptionRates = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
+		$.player.resources = { "gold": 1000, "diamonds": 0, "wood": 750, "food": 200 };
+		refreshStats();
+		refreshResources();
+	}
 }
