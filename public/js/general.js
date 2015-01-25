@@ -61,7 +61,6 @@ $(document).ready(function() {
 			if (Object.size(resources) > 0) {
 				refreshResources();
 				transferResources($.sendTo, resources);
-				$.network.send($.sendTo.nick, { "operation": "transfer", "resources": resources, "from": $.player.nick });
 			}
 		}
 	});
@@ -215,6 +214,7 @@ function transferResources(castleDestination, resources) {
 				x: $.player.x,
 				y: $.player.y
 			}, 10000, function(layer) {
+				$.network.send($.sendTo.nick, { "operation": "transfer", "resources": resources, "from": $.player.nick });
 				$(this).removeLayer(layer);
 				$(this).drawLayers();
 				$.player.stats["caravans"] += 1;
