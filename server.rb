@@ -15,9 +15,15 @@
 require 'sinatra'
 require 'json'
 
-set :bind, '10.240.200.61'
-set :port, 1233
-set :environment, :development
+if File.exists?("./config/config.rb")
+	puts "Loading config from file config/config.rb..."
+	require_relative "config/config.rb"
+else
+	puts "Config file does not exist. Using defaults."
+	set :bind, '10.240.200.61'
+	set :port, 1233
+	set :environment, :development
+end
 
 playerData = Hash.new
 players = []
