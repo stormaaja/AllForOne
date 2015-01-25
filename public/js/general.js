@@ -140,6 +140,8 @@ function connectToServer() {
 					if ($.player.nick !== this.nick)
 						$.players[$.players.length] = new Player(this.nick, (($.players.length + 1) % 4) * 200 + 150, (($.players.length + 1) / 4) * 200 + 100, this.playertype);
 				});
+			} else if (this["operation"] === "refresh_needed") {
+				location.reload();
 			}
 		});
 	};
