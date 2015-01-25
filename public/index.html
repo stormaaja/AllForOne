@@ -164,9 +164,12 @@
 
           <div class="row">
             <div class="col-md-8">
-              <audio controls autoplay loop>
-                <source src="music/All_For_One_Main_Theme_01_b.ogg" type="audio/ogg">
-                No musics
+              <audio controls id="commonMusic">
+                <source id="musicSource" src="music/All_For_One_Main_Theme_01_b.ogg" type="audio/ogg">
+                <source id="musicSource" src="music/All_For_One_-_Gameplay_Part_2.ogg" type="audio/ogg">
+              </audio>
+              <audio controls loop id="kingsMusic">
+                <source id="musicSource" src="music/All_For_One_-_Kings_Theme.ogg" type="audio/ogg">
               </audio>
             </div>
           </div>
@@ -197,5 +200,6 @@
     <audio id="upgradeSound1"><source src="audio/All_For_One_-_Upgrade_Chime_01.ogg" /></audio>
     <audio id="upgradeSound2"><source src="audio/All_For_One_-_Upgrade_Chime_01_b.ogg" /></audio>
     <audio id="banditsSound"><source src="audio/All_For_One_Bandits_01.ogg" /></audio>
+    <audio id="receiveStuffSound"><source src="audio/All_For_One_-_Receive_Stuff_Chime_01.ogg" /></audio>
   </body>
 </html>

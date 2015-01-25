@@ -50,6 +50,14 @@ $(document).ready(function() {
 	}
 	$.player.castle.selectable = false;
 
+	if ($.player.customResource === "king") {
+		$('#commonMusic').hide();
+		$('#kingsMusic')[0].play();
+	} else {
+		$('#kingsMusic').hide();
+		$('#commonMusic')[0].play();
+	}
+
 	$('#sendResources').click(function() { 
 		if ($.sendTo === undefined || $.player.stats["caravans"] === 0) {
 			return;
