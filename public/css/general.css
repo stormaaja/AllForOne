@@ -12,6 +12,7 @@
 html, body {
 	width: 100%;
 	height: 100%;
+	background-image: url('../images/ground.png');
 }
 
 .page {
@@ -23,7 +24,7 @@ html, body {
 	width: 300px;
 	height: 100%;
 	float: left;
-	box-shadow: 5px 0px 10px #888888;
+	background-color: rgba(255, 255, 255, 0.4);
 }
 
 .sideBarContent {
