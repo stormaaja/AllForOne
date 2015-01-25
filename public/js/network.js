@@ -11,7 +11,7 @@
 */
 
 function Network() {
-	this.server = "http://10.240.200.61:1233";
+	this.server = window.server;
 
 	this.onConnected = function() {};
 	this.onDisconnected = function() {};
