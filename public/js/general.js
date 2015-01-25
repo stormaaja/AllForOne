@@ -135,7 +135,10 @@ $(document).ready(function() {
    	$('#dropdownClass').data('selectedClass', $.player.customResource);
 
    	$('button').click(function() {
-   		$('#clickSound')[0].play();
+   		if ($(this).hasClass('upgradeButton'))
+   			$('#upgradeSound1')[0].play();
+   		else
+   			$('#clickSound')[0].play();
    	})
 });
 
