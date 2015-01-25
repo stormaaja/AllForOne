@@ -27,6 +27,7 @@ $(document).ready(function() {
 	$.players = [];
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
+	$.resourceIcons = { "gold": "images/coin.png", "diamonds": "images/diamond.png", "food": "images/food.png", "wood": "images/wood.png" };
 	var firstTime = true;
 
 	if ($.localStorage.isSet("player")) {
@@ -127,6 +128,7 @@ function connectToServer() {
 			if (this["operation"] === "transfer") {
 				$.each(this.resources, function(key, value) {
 					$.player.resources[key] += value;
+					createReceivedIndicator($.player, key);
 				});
 				refreshResources();
 			} else if (this["operation"] === "playerlist") {
@@ -144,6 +146,18 @@ function connectToServer() {
 	$.network.connect($.player.nick, $.player.customResource);
 }
 
+function createReceivedIndicator(player, resource, index) {
+	$('canvas').drawImage({
+		source: $.resourceIcons[resource],
+		layer: true,
+		x: player.castle.x,
+		y: player.castle.y
+	});
+	$('canvas').animateLayer(-1, {
+		y: player.castle.y - 50,
+		x: player.castle.x + 30 * index - 30
+	}, 2000, function(layer) { $('canvas').removeLayer(layer); });
+}
 
 function showError(message, object) {
 	alert(message);
