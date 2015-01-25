@@ -45,7 +45,7 @@ post '/connect' do
 	player = getPlayer(players, params["nick"])
 	if player != nil
 		puts "User #{params["nick"]} comes back";
-		player.playertype = params["playertype"]
+		player["playertype"] = params["playertype"]
 		playerData[params["nick"]].push({ :operation => "playerlist", :players =>  players })
 	else
 		puts "New user #{params["nick"]} as #{params["playertype"]}"
