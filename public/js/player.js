@@ -21,7 +21,7 @@ function Player(nick, x, y, nodeType) {
 	this.productionRates = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
 	this.consumptionRates = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
 	
-	this.resources = { "gold": 0, "diamonds": 0, "wood": 0, "food": 0 };
+	this.resources = { "gold": 1000, "diamonds": 0, "wood": 750, "food": 200 };
 
 	this.clicked = function() {
 		if ($.sendTo !== undefined && $.sendTo !== this)
