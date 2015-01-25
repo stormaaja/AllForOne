@@ -3,4 +3,4 @@ bootstrap
 jcanvas
 jquery.storageapi
 config/config.rb
-js/config/config.js
+public/js/config.js
