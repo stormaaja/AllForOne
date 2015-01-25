@@ -27,14 +27,17 @@ $(document).ready(function() {
 	$.players = [];
 	$.resourceFixes = { "gold": 100, "wood": 50, "diamonds": 5, "food": 100 };
 	$.resourceConsumptionMultipliers = { "gold": 2, "wood": 4, "diamonds": 6 };
+	var firstTime = true;
 
 	if ($.localStorage.isSet("player")) {
 		var player = $.localStorage.get("player");
 		$.player = new Player(player.nick, 100, 100, player.customResource);
 		$.player.resources = player.resources;
 		$.player.stats = player.stats;
+		firstTime = false;
 	} else {
 		$.player = new Player(generateNick(), 100, 100, Math.round(Math.random() * 2) == 0 ? "diamonds" : "woods");
+		$('#buttonUserSettings').click();
 	}
 	$.player.castle.selectable = false;
 
@@ -75,13 +78,15 @@ $(document).ready(function() {
 			$(this).prop('value', val - 1);
 	});
 
-	setInterval(function() {
+	if (!firstTime) {
+		setInterval(function() {
 			increaseResources();
-	}, $.resourceGenInterval);
+		}, $.resourceGenInterval);
 
-	setInterval(function() {
-		$.network.checkState($.player);
-	}, $.checkStateInterval);
+		setInterval(function() {
+			$.network.checkState($.player);
+		}, $.checkStateInterval);
+	}
 
 	if ($.player.customResource === "wood")
 		$('.resourceDiamonds').remove();
@@ -92,12 +97,12 @@ $(document).ready(function() {
 		$.player.customResource = $('#dropdownClass').data('selectedClass');
 		$.player.nick = $('#username').prop('value');
 		$.localStorage.set("player", $.player.simplify());
-		connectToServer();
+		location.reload();
 	});
 
-	connectToServer();
+	if (!firstTime)
+		connectToServer();
 
-	//$('#buttonUserSettings').click();
 	refreshStats();
 	refreshResources();
 
@@ -115,7 +120,7 @@ function connectToServer() {
 	$.network = new Network();
 	$.network.nick = $.player.nick;
 	$.network.onConnected = function() {
-		$('#buttonCloseSettingsDialog').click();
+		
 	}
 	$.network.onStateReceived = function(state) {
 		$(state).each(function() {
