@@ -126,9 +126,10 @@ function connectToServer() {
 	$.network.onStateReceived = function(state) {
 		$(state).each(function() {
 			if (this["operation"] === "transfer") {
+				var index = 0;
 				$.each(this.resources, function(key, value) {
 					$.player.resources[key] += value;
-					createReceivedIndicator($.player, key);
+					createReceivedIndicator($.player, key, index++);
 				});
 				refreshResources();
 			} else if (this["operation"] === "playerlist") {
