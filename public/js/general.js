@@ -42,7 +42,7 @@ $(document).ready(function() {
 	$.player.castle.selectable = false;
 
 	$('#sendResources').click(function() { 
-		if ($.sendTo === undefined) {
+		if ($.sendTo === undefined || $.player.stats["caravans"] === 0) {
 			return;
 		}
 		else {
@@ -188,6 +188,8 @@ function transferResources(castleDestination, resources) {
 		width: 25,
 		height: 25
 	});
+	$.player.stats["caravans"] -= 1;
+	refreshStats();
 
 	$('canvas').animateLayer(-1, {
 			x: castleDestination.x,
@@ -200,6 +202,8 @@ function transferResources(castleDestination, resources) {
 			}, 10000, function(layer) {
 				$(this).removeLayer(layer);
 				$(this).drawLayers();
+				$.player.stats["caravans"] += 1;
+				refreshStats();
 			})
 		});
 }
@@ -241,6 +245,9 @@ function refreshStats() {
 	$.foodConsumption = Math.floor(consumption / 10.0);
 	$('#foodConsumptionValue').text($.foodConsumption);
 	$('#goldConsumptionValue').text($.goldConsumption);
+	$('.playerStat').each(function() {
+		$(this).text($.player.stats[$(this).data('statType')]);
+	});
 }
 
 function generateNick() {
