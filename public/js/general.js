@@ -147,6 +147,7 @@ $(document).ready(function() {
 function bandidosFunction() {
 	if ($.player === undefined)
 		return;
+	$('#banditsSound')[0].play();
 	$('canvas').drawImage( {
 		source: 'images/bandidos.png',
 		layer: true,
