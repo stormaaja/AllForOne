@@ -33,6 +33,7 @@ $(document).ready(function() {
 	$.resourceIcons = { "gold": "images/coin.png", "diamonds": "images/diamond.png", "food": "images/food.png", "wood": "images/wood.png" };
 
 	$.events = [ { "probability": 1.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
+	$.winningEvents = [ { "name": "Win by diamonds", checkTerms: function() { checkDiamondsWin(); } }];
 
 	var firstTime = true;
 
@@ -330,6 +331,7 @@ function increaseResources() {
 	if ($.king !== undefined) {
 		$.network.send($.king.nick, { "operation": "resource_update", "resources": $.player.resources, "from": $.player.nick });
 	}
+
 }
 
 function setInfo(player) {
@@ -361,4 +363,9 @@ function refreshStats() {
 
 function generateNick() {
 	return "anon" + Math.floor(Math.random() * 100000);
+}
+
+function checkDiamondsWin() {
+	if ($.player.customResource === "king" && $.player.resources["diamonds"] > 1000)
+		alert("Congrats. You win.");
 }
