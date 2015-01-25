@@ -32,7 +32,7 @@ $(document).ready(function() {
 	$.resourceConsumptionFixesForMoney = { "food": 1.0, "wood": 1.5, "diamonds": 6.0 };
 	$.resourceIcons = { "gold": "images/coin.png", "diamonds": "images/diamond.png", "food": "images/food.png", "wood": "images/wood.png" };
 
-	$.events = [ { "probability": 10.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
+	$.events = [ { "probability": 1.0, "name": "Bandits", eventFunction: function() { bandidosFunction() } }];
 
 	var firstTime = true;
 
@@ -133,6 +133,10 @@ $(document).ready(function() {
 
    	$('#username').prop('value', $.player.nick);
    	$('#dropdownClass').data('selectedClass', $.player.customResource);
+
+   	$('button').click(function() {
+   		$('#clickSound')[0].play();
+   	})
 });
 
 function bandidosFunction() {
